@@ -1,0 +1,402 @@
+[
+    {
+        "path": "/kaggle/working/5279.jpg",
+        "label": 0
+    },
+    {
+        "path": "/kaggle/working/7356.jpg",
+        "label": 0
+    },
+    {
+        "path": "/kaggle/working/7419.jpg",
+        "label": 0
+    },
+    {
+        "path": "/kaggle/working/6623.jpg",
+        "label": 0
+    },
+    {
+        "path": "/kaggle/working/4194.jpg",
+        "label": 0
+    },
+    {
+        "path": "/kaggle/working/6772.jpg",
+        "label": 0
+    },
+    {
+        "path": "/kaggle/working/6331.jpg",
+        "label": 0
+    },
+    {
+        "path": "/kaggle/working/5236.jpg",
+        "label": 0
+    },
+    {
+        "path": "/kaggle/working/8702.jpg",
+        "label": 0
+    },
+    {
+        "path": "/kaggle/working/1319.jpg",
+        "label": 0
+    },
+    {
+        "path": "/kaggle/working/5182.jpg",
+        "label": 1
+    },
+    {
+        "path": "/kaggle/working/7472.jpg",
+        "label": 1
+    },
+    {
+        "path": "/kaggle/working/7483.jpg",
+        "label": 1
+    },
+    {
+        "path": "/kaggle/working/6728.jpg",
+        "label": 1
+    },
+    {
+        "path": "/kaggle/working/4206.jpg",
+        "label": 1
+    },
+    {
+        "path": "/kaggle/working/6858.jpg",
+        "label": 1
+    },
+    {
+        "path": "/kaggle/working/6405.jpg",
+        "label": 1
+    },
+    {
+        "path": "/kaggle/working/5079.jpg",
+        "label": 1
+    },
+    {
+        "path": "/kaggle/working/8527.jpg",
+        "label": 1
+    },
+    {
+        "path": "/kaggle/working/1404.jpg",
+        "label": 1
+    },
+    {
+        "path": "/kaggle/working/5129.jpg",
+        "label": 2
+    },
+    {
+        "path": "/kaggle/working/7348.jpg",
+        "label": 2
+    },
+    {
+        "path": "/kaggle/working/7366.jpg",
+        "label": 2
+    },
+    {
+        "path": "/kaggle/working/6595.jpg",
+        "label": 2
+    },
+    {
+        "path": "/kaggle/working/3875.jpg",
+        "label": 2
+    },
+    {
+        "path": "/kaggle/working/6740.jpg",
+        "label": 2
+    },
+    {
+        "path": "/kaggle/working/6260.jpg",
+        "label": 2
+    },
+    {
+        "path": "/kaggle/working/5022.jpg",
+        "label": 2
+    },
+    {
+        "path": "/kaggle/working/8610.jpg",
+        "label": 2
+    },
+    {
+        "path": "/kaggle/working/1382.jpg",
+        "label": 2
+    },
+    {
+        "path": "/kaggle/working/5232.jpg",
+        "label": 3
+    },
+    {
+        "path": "/kaggle/working/7374.jpg",
+        "label": 3
+    },
+    {
+        "path": "/kaggle/working/7384.jpg",
+        "label": 3
+    },
+    {
+        "path": "/kaggle/working/6670.jpg",
+        "label": 3
+    },
+    {
+        "path": "/kaggle/working/4266.jpg",
+        "label": 3
+    },
+    {
+        "path": "/kaggle/working/6793.jpg",
+        "label": 3
+    },
+    {
+        "path": "/kaggle/working/6203.jpg",
+        "label": 3
+    },
+    {
+        "path": "/kaggle/working/5191.jpg",
+        "label": 3
+    },
+    {
+        "path": "/kaggle/working/8435.jpg",
+        "label": 3
+    },
+    {
+        "path": "/kaggle/working/1334.jpg",
+        "label": 3
+    },
+    {
+        "path": "/kaggle/working/5172.jpg",
+        "label": 4
+    },
+    {
+        "path": "/kaggle/working/7135.jpg",
+        "label": 4
+    },
+    {
+        "path": "/kaggle/working/7172.jpg",
+        "label": 4
+    },
+    {
+        "path": "/kaggle/working/6396.jpg",
+        "label": 4
+    },
+    {
+        "path": "/kaggle/working/4099.jpg",
+        "label": 4
+    },
+    {
+        "path": "/kaggle/working/6531.jpg",
+        "label": 4
+    },
+    {
+        "path": "/kaggle/working/6016.jpg",
+        "label": 4
+    },
+    {
+        "path": "/kaggle/working/5031.jpg",
+        "label": 4
+    },
+    {
+        "path": "/kaggle/working/8487.jpg",
+        "label": 4
+    },
+    {
+        "path": "/kaggle/working/1491.jpg",
+        "label": 4
+    },
+    {
+        "path": "/kaggle/working/5337.jpg",
+        "label": 5
+    },
+    {
+        "path": "/kaggle/working/7287.jpg",
+        "label": 5
+    },
+    {
+        "path": "/kaggle/working/7295.jpg",
+        "label": 5
+    },
+    {
+        "path": "/kaggle/working/6590.jpg",
+        "label": 5
+    },
+    {
+        "path": "/kaggle/working/4238.jpg",
+        "label": 5
+    },
+    {
+        "path": "/kaggle/working/6756.jpg",
+        "label": 5
+    },
+    {
+        "path": "/kaggle/working/6216.jpg",
+        "label": 5
+    },
+    {
+        "path": "/kaggle/working/5222.jpg",
+        "label": 5
+    },
+    {
+        "path": "/kaggle/working/8469.jpg",
+        "label": 5
+    },
+    {
+        "path": "/kaggle/working/1586.jpg",
+        "label": 5
+    },
+    {
+        "path": "/kaggle/working/5286.jpg",
+        "label": 6
+    },
+    {
+        "path": "/kaggle/working/7469.jpg",
+        "label": 6
+    },
+    {
+        "path": "/kaggle/working/7498.jpg",
+        "label": 6
+    },
+    {
+        "path": "/kaggle/working/6651.jpg",
+        "label": 6
+    },
+    {
+        "path": "/kaggle/working/4161.jpg",
+        "label": 6
+    },
+    {
+        "path": "/kaggle/working/6826.jpg",
+        "label": 6
+    },
+    {
+        "path": "/kaggle/working/6305.jpg",
+        "label": 6
+    },
+    {
+        "path": "/kaggle/working/5174.jpg",
+        "label": 6
+    },
+    {
+        "path": "/kaggle/working/8613.jpg",
+        "label": 6
+    },
+    {
+        "path": "/kaggle/working/1154.jpg",
+        "label": 6
+    },
+    {
+        "path": "/kaggle/working/5246.jpg",
+        "label": 7
+    },
+    {
+        "path": "/kaggle/working/7332.jpg",
+        "label": 7
+    },
+    {
+        "path": "/kaggle/working/7355.jpg",
+        "label": 7
+    },
+    {
+        "path": "/kaggle/working/6496.jpg",
+        "label": 7
+    },
+    {
+        "path": "/kaggle/working/4084.jpg",
+        "label": 7
+    },
+    {
+        "path": "/kaggle/working/6657.jpg",
+        "label": 7
+    },
+    {
+        "path": "/kaggle/working/6209.jpg",
+        "label": 7
+    },
+    {
+        "path": "/kaggle/working/5153.jpg",
+        "label": 7
+    },
+    {
+        "path": "/kaggle/working/8660.jpg",
+        "label": 7
+    },
+    {
+        "path": "/kaggle/working/1426.jpg",
+        "label": 7
+    },
+    {
+        "path": "/kaggle/working/5249.jpg",
+        "label": 8
+    },
+    {
+        "path": "/kaggle/working/7564.jpg",
+        "label": 8
+    },
+    {
+        "path": "/kaggle/working/7580.jpg",
+        "label": 8
+    },
+    {
+        "path": "/kaggle/working/6754.jpg",
+        "label": 8
+    },
+    {
+        "path": "/kaggle/working/4014.jpg",
+        "label": 8
+    },
+    {
+        "path": "/kaggle/working/6952.jpg",
+        "label": 8
+    },
+    {
+        "path": "/kaggle/working/6449.jpg",
+        "label": 8
+    },
+    {
+        "path": "/kaggle/working/5138.jpg",
+        "label": 8
+    },
+    {
+        "path": "/kaggle/working/8676.jpg",
+        "label": 8
+    },
+    {
+        "path": "/kaggle/working/1262.jpg",
+        "label": 8
+    },
+    {
+        "path": "/kaggle/working/5092.jpg",
+        "label": 9
+    },
+    {
+        "path": "/kaggle/working/7543.jpg",
+        "label": 9
+    },
+    {
+        "path": "/kaggle/working/7563.jpg",
+        "label": 9
+    },
+    {
+        "path": "/kaggle/working/6649.jpg",
+        "label": 9
+    },
+    {
+        "path": "/kaggle/working/3979.jpg",
+        "label": 9
+    },
+    {
+        "path": "/kaggle/working/6852.jpg",
+        "label": 9
+    },
+    {
+        "path": "/kaggle/working/6218.jpg",
+        "label": 9
+    },
+    {
+        "path": "/kaggle/working/5028.jpg",
+        "label": 9
+    },
+    {
+        "path": "/kaggle/working/8758.jpg",
+        "label": 9
+    },
+    {
+        "path": "/kaggle/working/1305.jpg",
+        "label": 9
+    }
+]

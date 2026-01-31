@@ -11,12 +11,16 @@ import numpy as np
 import importlib.util
 import logging as log
 from datetime import datetime
+from tdpm import tdpm
 
 import wrench
 from wrench.dataset import load_dataset
 from wrench._logging import LoggingHandler
 from wrench.endmodel import EndClassifierModel, LogRegModel
 from wrench.labelmodel import Snorkel, MajorityVoting, MajorityWeightedVoting
+from auto_lf.extractors.vlm_wrapper import VLMExtractor
+from auto_lf.extractors.psg_wrapper import PSGExtractor
+from auto_lf.router import Router
 
 class Labeler:
 
@@ -33,6 +37,77 @@ class Labeler:
                              "Model" : args["codellm"]}
         if "prior_type" in args:
             self.final_result["Heuristic Mode"] = args["prior_type"]
+
+    # Ham them cho
+    def load_generated_lfs(self, path="generated_lfs.py"):
+        """Load các hàm LF từ file python được sinh tự động"""
+        if not os.path.exists(path):
+            self.logger.warning(f"Generated LFs file not found at {path}")
+            return []
+            
+        spec = importlib.util.spec_from_file_location("generated_lfs", path)
+        module = importlib.util.module_from_spec(spec)
+        sys.modules["generated_lfs"] = module
+        spec.loader.exec_module(module)
+        
+        lfs = []
+        for name in dir(module):
+            obj = getattr(module, name)
+            # Wrench LF thường được decorate, kiểm tra callable là đủ an toàn
+            if callable(obj) and name.startswith("auto_lf"):
+                lfs.append(obj)
+        
+        self.logger.info(f"Loaded {len(lfs)} Auto-LFs from {path}")
+        return lfs
+    
+    def precompute_image_features(self, dataset):
+        """
+        Chạy Feature Extraction một lần cho toàn bộ dataset.
+        Input: Wrench Dataset
+        Output: Dict {image_path: set(features)}
+        """
+        # Kiểm tra cache để tránh tính lại nếu train/valid trùng ảnh
+        if not hasattr(self, 'feature_cache'):
+            self.feature_cache = {}
+            # Khởi tạo Extractor 1 lần duy nhất
+            self.router = Router()
+            self.vlm = VLMExtractor(device=self.device)
+            # self.psg = PSGExtractor(...) 
+
+        cache = {}
+        self.logger.info(f"Pre-computing features for {len(dataset)} images...")
+        
+        for i in tqdm(range(len(dataset))):
+            # Giả định: dataset của wrench lưu đường dẫn ảnh trong trường "text"
+            # Nếu dataset của bạn lưu ở trường khác (vd: "path"), hãy sửa dòng dưới
+            img_path = dataset.examples[i]["text"] 
+            
+            if img_path in self.feature_cache:
+                cache[img_path] = self.feature_cache[img_path]
+                continue
+
+            try:
+                # Logic Router
+                mode = self.router.route(img_path)
+                
+                # Logic Extract
+                if mode == "SIMPLE":
+                    feats = self.vlm.extract(img_path)
+                else:
+                    # feats = self.psg.extract(img_path)
+                    feats = self.vlm.extract(img_path) # Fallback
+                
+                # Lưu dưới dạng set để tìm kiếm O(1)
+                feature_set = set(feats)
+                self.feature_cache[img_path] = feature_set
+                cache[img_path] = feature_set
+                
+            except Exception as e:
+                # Fallback nếu lỗi đọc ảnh
+                self.feature_cache[img_path] = set()
+                cache[img_path] = set()
+                
+        return cache
         
     def get_model(self, name):
 
@@ -120,35 +195,60 @@ class Labeler:
         
         return file_path_collection
         
-    def get_weak_labels(self, data, type):
+    def get_weak_labels(self, data, type, generate_lfs=None):
         
         module_spec = importlib.util.spec_from_loader("temp_module", loader=None)
         module = importlib.util.module_from_spec(module_spec)
 
         weak_label_matrix = []
-        
-        for file_path in self.file_path_collection:
-            print(f"Read {file_path} for {type} data")
-            with open(file_path, "r", encoding="utf-8") as f:
-                code_string = f.read()
+
+        if hasattr(self, 'file_path_collection') and self.file_path_collection:
+            for file_path in self.file_path_collection:
+                print(f"Read {file_path} for {type} data")
+                with open(file_path, "r", encoding="utf-8") as f:
+                    code_string = f.read()
+                    
+                try:
+                    exec(code_string, module.__dict__)
+                    sys.modules["temp_module"] = module
+                    from temp_module import label_function
+                    
+                    weak_labels = []
                 
-            try:
-                exec(code_string, module.__dict__)
-                sys.modules["temp_module"] = module
-                from temp_module import label_function
-                
+                    for i in range(len(data.examples)):
+                        example = data.examples[i]["text"]
+                        weak_label = label_function(example)
+                        weak_labels.append(weak_label)
+                    weak_label_matrix.append(weak_labels)
+                except:
+                    self.logger.error(f"Error in {file_path}")
+
+        if generate_lfs is not None:
+            feature_map = self.precompute_image_features(data)
+
+            for lf_func in generated_lfs:
                 weak_labels = []
-            
                 for i in range(len(data.examples)):
-                    example = data.examples[i]["text"]
-                    weak_label = label_function(example)
-                    weak_labels.append(weak_label)
-                weak_label_matrix.append(weak_labels)
-            except:
-                self.logger.error(f"Error in {file_path}")
+                    img_path = data.examples[i]["text"]
+                    
+                    # 2. Tạo đối tượng giả lập chứa features để pass vào LF
+                    # Vì generated LF của ta có dạng: def lf(x): if 'feat' in x.features...
+                    x_proxy = SimpleNamespace(features=feature_map.get(img_path, set()))
+                    
+                    try:
+                        # Gọi hàm LF
+                        wl = lf_func(x_proxy)
+                        weak_labels.append(wl)
+                    except Exception as e:
+                        weak_labels.append(-1) # ABSTAIN nếu lỗi
                 
-        weak_label_matrix = np.array(weak_label_matrix).T
+                weak_label_matrix.append(weak_labels)
+
+                    
+        if len(weak_label_matrix) == 0:
+            return np.array([])
         
+        weak_label_matrix = np.array(weak_label_matrix).T
         return weak_label_matrix
 
     def get_LF_summary(self):
@@ -292,6 +392,7 @@ class Labeler:
 
         ## get LF file paths ##
         self.file_path_collection = self.get_LF_file_paths()
+        self.auto_lfs = self.load_generated_lfs(path="generated_lfs.py")
         self.final_result["num_of_LF"] = len(self.file_path_collection)
         
         ## produce weak labels ##
@@ -330,6 +431,20 @@ class Labeler:
         ## show final results ##
         # pp = pprint.PrettyPrinter(depth=4)
         # pp.pprint(self.final_result)
+
+        # Cập nhật tổng số LF để log
+        total_lfs = len(self.file_path_collection) + len(self.auto_lfs)
+        self.final_result["num_of_LF"] = total_lfs
+        
+        # 3. Tính Weak Labels (Phiên bản mới)
+        self.logger.info("Computing weak labels for Training Data...")
+        self.train_data.weak_labels = self.get_weak_labels(self.train_data, type="train", generated_lfs=self.auto_lfs)
+        
+        self.logger.info("Computing weak labels for Validation Data...")
+        self.valid_data.weak_labels = self.get_weak_labels(self.valid_data, type="valid", generated_lfs=self.auto_lfs)
+        
+        self.logger.info("Computing weak labels for Testing Data...")
+        self.test_data.weak_labels = self.get_weak_labels(self.test_data, type="test", generated_lfs=self.auto_lfs)
 
         if self.args["mode"] == "ScriptoriumWS":
             self.final_result["Heuristic Mode"] = None
