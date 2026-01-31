@@ -21,7 +21,7 @@ OUTPUT_LF_FILE = "generated_lfs.py"
 
 # [CẤU HÌNH TEST]
 # Đường dẫn file CSV Test (chứa cột 'image_na' và 'label')
-TEST_CSV_PATH = "data/devser/Cifar10-test.csv" 
+TEST_CSV_PATH = "data/devset/Cifar10-test.csv" 
 # Thư mục chứa ảnh Test (vì CSV chỉ có tên file như '0.jpg')
 TEST_IMAGES_DIR = "data/devset" 
 
