@@ -18,8 +18,18 @@ class RuleMiner:
         print(f"Generating LFs into {output_file}...")
         
         with open(output_file, "w", encoding="utf-8") as f:
-            f.write("from wrench.labeling import labeling_function\n")
+            # === [THAY ĐỔI QUAN TRỌNG Ở ĐÂY] ===
+            # XÓA dòng import wrench cũ
+            # THAY BẰNG đoạn code tự định nghĩa decorator để không bị lỗi ModuleNotFoundError
+            f.write("import logging\n")
             f.write("ABSTAIN = -1\n\n")
+
+            f.write("# Định nghĩa decorator giả lập để chạy độc lập\n")
+            f.write("def labeling_function(**kwargs):\n")
+            f.write("    def decorator(f):\n")
+            f.write("        return f\n")
+            f.write("    return decorator\n\n")
+            # ===================================
 
             # --- VÒNG LẶP ONE-VS-REST ---
             for target_class in unique_classes:
@@ -34,18 +44,15 @@ class RuleMiner:
                     continue
 
                 # Train cây riêng cho Class này
-                # class_weight='balanced' giúp cây chú ý đến class hiếm
                 clf = DecisionTreeClassifier(max_depth=3, class_weight='balanced', random_state=42)
                 clf.fit(X, binary_labels)
                 
-                # --- DUYỆT CÂY (Chỉ lấy nhánh dự đoán ra 1 - tức là ra target_class) ---
+                # --- DUYỆT CÂY ---
                 tree_ = clf.tree_
                 
                 def recurse(node, conditions):
                     # Nếu là lá
                     if tree_.feature[node] == -2:
-                        # Kiểm tra xem lá này dự đoán là 1 (Target Class) hay 0 (Others)
-                        # tree_.value[node] trả về [[số lượng 0, số lượng 1]]
                         prediction = np.argmax(tree_.value[node]) 
                         
                         # CHỈ SINH LUẬT NẾU LÁ NÀY DỰ ĐOÁN LÀ TARGET_CLASS (1)
@@ -67,7 +74,7 @@ class RuleMiner:
                             full_condition = " and ".join(cond_strs)
                             
                             f.write(f"    if {full_condition}:\n")
-                            f.write(f"        return {target_class}\n") # Trả về đúng nhãn target
+                            f.write(f"        return {target_class}\n") 
                             f.write(f"    return ABSTAIN\n\n")
                         return
 
