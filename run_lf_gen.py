@@ -12,7 +12,7 @@ def main():
     with open("data/devset/dev.json", "r") as f:
         dev_data = json.load(f)
     
-    image_paths = [item["image_path"] for item in dev_data]
+    image_paths = [item["path"] for item in dev_data]
     dev_labels = [item["label"] for item in dev_data]
     
     router = Router()
