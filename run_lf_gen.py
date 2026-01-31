@@ -161,7 +161,7 @@ def main():
     
     for idx, row in tqdm(df_test.iterrows(), total=len(df_test), desc="Testing"):
         # Ghép thư mục ảnh với tên file trong CSV
-        filename = row['image_na']
+        filename = row['image_name']
         true_label = int(row['label'])
         
         img_full_path = os.path.join(TEST_IMAGES_DIR, filename)
