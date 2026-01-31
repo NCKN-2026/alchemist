@@ -11,6 +11,7 @@ from auto_lf.router import Router
 from auto_lf.extractors.vlm_wrapper import VLMExtractor
 from auto_lf.miners.rule_miner import RuleMiner
 
+
 # ==========================================
 # CẤU HÌNH
 # ==========================================
